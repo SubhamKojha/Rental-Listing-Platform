@@ -1,0 +1,44 @@
+<% layout("layouts/boilerplate.ejs") %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+                
+                <div class="card-body text-center p-4">
+
+                    <!-- Icon -->
+                    <div class="mb-3" style="font-size: 2.5rem; color:#FF385C;">
+                        ⚠️
+                    </div>
+
+                    <!-- Title -->
+                    <h4 class="fw-semibold mb-2">
+                        Something went wrong
+                    </h4>
+
+                    <!-- Error Message -->
+                    <p class="text-muted mb-4">
+                        <%= err.message %>
+                    </p>
+
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="/" class="btn px-4"
+                           style="background:#FF385C; color:white; border-radius:30px;">
+                            Go Home
+                        </a>
+
+                        <a href="javascript:history.back()" 
+                           class="btn btn-outline-secondary px-4 rounded-pill">
+                            Go Back
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
