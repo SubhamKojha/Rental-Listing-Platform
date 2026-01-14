@@ -8,7 +8,7 @@ console.log("MONGO_URL:", process.env.MONGO_URL);
 
 async function main () {
     try {
-        await mongoose.connect(process.env.MONGO_URL);
+        await mongoose.connect(process.env.MONGO_URL || "mongodb://localhost:27017/airbnb");
         console.log("MongoDb connected"); 
         await initDb();
         console.log("Data seeding completed");
@@ -21,6 +21,10 @@ async function main () {
 
 const initDb = async () => {
     await Listing.deleteMany({});
+    initData.data = initData.data.map((obj) => ({
+        ...obj,
+        owner: "69676936a76737dfd3f4da17"
+    }));
     await Listing.insertMany(initData.data);
     console.log("Data Initialized");
 }

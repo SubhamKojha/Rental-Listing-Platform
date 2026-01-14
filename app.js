@@ -10,7 +10,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 
 const passport = require("passport");
-const LocalStrategy = require("passport-local-mongoose");
+const LocalStrategy = require("passport-local");
 
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
@@ -21,8 +21,9 @@ const Listing = require("./models/listing.js");
 const Review = require("./models/review.js");
 const User = require("./models/user.js");
 
-const listings = require("./routes/listingRoutes.js");
-const reviews = require("./routes/reviewRoutes.js");
+const listingRoutes = require("./routes/listingRoutes.js");
+const reviewRoutes = require("./routes/reviewRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
 
 const app = express();
 
@@ -69,6 +70,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
     next();
 });
 
@@ -76,8 +78,9 @@ app.get("/", (req, res) => {
     res.render("home.ejs");
 });
 
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
+app.use("/listings", listingRoutes);
+app.use("/listings/:id/reviews", reviewRoutes);
+app.use("/", userRoutes);
 
 app.all("/*splat", (req, res, next) => {
     next(new ExpressError(404, "Page Not Found"));
