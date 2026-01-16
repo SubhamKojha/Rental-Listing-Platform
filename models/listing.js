@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
 const User = require("./user.js");
+const { string } = require("joi");
 
 const listingSchema = new Schema({
     title: {
@@ -12,9 +13,8 @@ const listingSchema = new Schema({
         type: String,
     },
     image: {
-        type: String,
-        default: "https://unsplash.com/photos/two-sun-decorations-hang-on-a-wooden-door-J9Wtgz2Emr8",
-        set: (v) => v === "" ? "https://unsplash.com/photos/two-sun-decorations-hang-on-a-wooden-door-J9Wtgz2Emr8" : v,
+        url: String,
+        filename: String,
     },
     price: {
         type: Number,
@@ -24,6 +24,15 @@ const listingSchema = new Schema({
     },
     country: {
         type: String,
+    },
+    geometry: {
+        type: {
+            type: String,
+            enum: ["Point"]
+        },
+        coordinates: {
+            type: [Number] // [lng, lat]
+        }
     },
     reviews: [
         {

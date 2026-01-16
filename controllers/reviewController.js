@@ -1,3 +1,4 @@
+const Listing = require("../models/listing.js");
 const Review = require("../models/review.js");
 
 module.exports.createReview = async (req, res) => {

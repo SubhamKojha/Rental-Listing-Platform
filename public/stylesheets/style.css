@@ -202,3 +202,10 @@ body {
 .star.filled {
     color: #000000;
 }
+
+/*map*/
+#map {
+  height: 400px;
+  width: 100%;
+  border-radius: 12px;
+}

@@ -22,13 +22,15 @@
                         Please enter a valid description
                     </div>
                 </div>
+
+                <div class="mb-3">
+                    Original Image
+                    <img src="<%=listing.image.url%>" alt="listing image">
+                </div>
                 
                 <div class="mb-3">
                     <label for="image" class="form-label">Image</label>
-                    <input type="text" name="listing[image]" value="<%=listing.image%>" class="form-control" required>
-                    <div class="invalid-feedback">
-                        Please enter a valid image url
-                    </div>
+                    <input type="file" name="listing[image]" value="<%=listing.image%>" class="form-control">
                 </div>
 
                 <div class="row">
