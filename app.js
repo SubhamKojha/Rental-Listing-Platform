@@ -7,6 +7,7 @@ require("dotenv").config();
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 
 const passport = require("passport");
@@ -42,8 +43,21 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
+const store = MongoStore.create({
+    mongoUrl: process.env.MONGO_URL + "airbnb",
+    crypto: {
+        secret: process.env.SESSION_SECRET
+    },
+    touchAfter: 24 * 3600,
+});
+
+store.on("error", (err) => {
+    console.log("Error in Mongo Store", err);
+});
+
 const sessionOptions = {
-    secret: process.env.SESSION_SECRET, 
+    store,
+    secret: process.env.SESSION_SECRET,
     resave: false, 
     saveUninitialized: false,
     cookie: {
