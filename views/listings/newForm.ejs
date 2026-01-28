@@ -1,64 +1,71 @@
 <% layout("layouts/boilerplate.ejs") %>
+
 <body>
+    <div class="container new-listing-page">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
 
-    <br>
-    <div class="row mt-3">
-        <div class="col-8 offset-2">
-            <h3>Create New Listing</h3>
-            <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="title" class="form-label">Title</label>
-                    <input type="text" name="listing[title]" placeholder="Add a catchy title" class="form-control" required>
-                    <div class="valid-feedback">
-                        Title Looks Good!
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea name="listing[description]" id="" placeholder="Description" class="form-control" required></textarea>
-                    <div class="invalid-feedback">
-                        Please enter a short description
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="image" class="form-label">Upload Listing image</label>
-                    <input type="file" name="listing[image]" class="form-control" required>
-                </div>
-                
-                <div class="row">
-                        <div class="mb-3 col-md-4"> 
-                            <label for="price" class="form-label">Price</label>
-                            <input type="text" name="listing[price]" placeholder="1200" class="form-control" required>
-                            <div class="invalid-feedback">
-                                Please enter a valid price
-                            </div>
+                <h2 class="page-title">Create a new listing</h2>
+                <p class="page-subtitle">
+                    Start with the basics. You can always edit later.
+                </p>
+
+                <form 
+                    method="POST" 
+                    action="/listings" 
+                    enctype="multipart/form-data"
+                    class="listing-form"
+                >
+
+                    <!-- Row 1 -->
+                    <div class="form-row">
+                        <div>
+                            <label>Title</label>
+                            <input type="text" name="listing[title]" placeholder="Cozy studio near the river" required>
                         </div>
 
-                        <div class="mb-3 col-md-8">
-                            <label for="country" class="form-label">Country</label>
-                            <input type="text" name="listing[country]" placeholder="India" class="form-control" required>
-                            <div class="invalid-feedback">
-                                Country should be valid
-                            </div>
+                        <div>
+                            <label>Price (₹)</label>
+                            <input type="number" name="listing[price]" placeholder="1200" required>
                         </div>
-                </div>
-                
-
-                <div class="mb-3">
-                    <label for="location" class="form-label">Location</label>
-                    <input type="text" name="listing[location]" placeholder="Kolkata, West Bengal" class="form-control" required>
-                    <div class="invalid-feedback">
-                        Location should be valid
                     </div>
-                </div>
 
-                
-                <br>
-                <button class="btn btn-dark add-btn mt-3">Add</button>
-                <br><br>
-            </form>
+                    <!-- Description -->
+                    <div class="form-section">
+                        <label>Description</label>
+                        <textarea 
+                            name="listing[description]" 
+                            rows="4"
+                            placeholder="What makes your place special?"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="form-row">
+                        <div>
+                            <label>Country</label>
+                            <input type="text" name="listing[country]" placeholder="India" required>
+                        </div>
+
+                        <div>
+                            <label>Location</label>
+                            <input type="text" name="listing[location]" placeholder="Malibu, California" required>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="form-section">
+                        <label>Listing image</label>
+                        <input type="file" name="listing[image]" required>
+                    </div>
+
+                    <button class="primary-cta">
+                        Create listing
+                    </button>
+
+                </form>
+            </div>
         </div>
     </div>
 </body>

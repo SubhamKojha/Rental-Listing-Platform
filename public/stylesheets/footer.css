@@ -1,0 +1,61 @@
+.footer {
+    background-color: #111;
+    color: #ccc;
+    padding: 3rem 1.5rem;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+.footer h3,
+.footer h4 {
+    color: #fff;
+    margin-bottom: 0.75rem;
+}
+
+.footer p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #bbb;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #fff;
+}
+
+.footer-socials .social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-socials a {
+    color: #bbb;
+    font-size: 1.2rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-socials a:hover {
+    color: #fff;
+    transform: translateY(-2px);
+}

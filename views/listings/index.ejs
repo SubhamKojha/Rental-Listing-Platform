@@ -1,33 +1,48 @@
 <% layout("layouts/boilerplate.ejs") %>
 
 <body>
-    <h3>All Listings</h3>
-    
-    <div class="row row-cols-lg-3 row-cols-md=2 row-cols-sm-1">
-        <% for (let listing of allListings) { %>
-            <a href="/listings/<%=listing._id%>" class="listing-link">
-                <div class="card col listing-card">
-                    <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem;">
-                    <div class="card-img-overlay">
-                        
+    <div class="container mt-4">
+        <h3 class="mb-4 fw-semibold">All Listings</h3>
+
+        <% if (allListings.length === 0) { %>
+            <div class="text-center mt-5">
+                <p class="fs-4 fw-semibold">No places found</p>
+                <p class="text-muted">
+                    Try adjusting your search or explore nearby stays.
+                </p>
+            </div>
+        <% } else { %>
+
+            <div class="row g-4">
+                <% for (let listing of allListings) { %>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <a href="/listings/<%= listing._id %>" class="listing-link">
+                            <div class="card listing-card h-100">
+
+                                <img 
+                                    src="<%= listing.image.url %>" 
+                                    alt="listing_image"
+                                    class="card-img-top listing-img"
+                                >
+
+                                <div class="card-body">
+                                    <p class="listing-title mb-1">
+                                        <%= listing.title %>
+                                    </p>
+                                    <p class="listing-price mb-0">
+                                        &#8377;<%= listing.price.toLocaleString("en-IN") %>
+                                        <span>/ night</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </a>
                     </div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            <b><%= listing.title %></b>
-                            <br>
-                            &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
-                        </p>
-                    </div>
-                </div>
-            </a>
+
+                <% } %>
+            </div>
+
         <% } %>
     </div>
-    
-
-    <!-- <ul>
-        <% for (let listing of allListings) { %>
-            <li><a href="/listings/<%=listing._id%>"><%= listing.title %></a></li>
-        <% } %>
-    </ul> -->
-
 </body>

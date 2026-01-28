@@ -1,0 +1,68 @@
+.new-listing-page {
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+}
+
+.page-title {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.page-subtitle {
+    color: #717171;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+/* Form */
+.listing-form label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+.listing-form input,
+.listing-form textarea {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border-radius: 0.6rem;
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+}
+
+.listing-form input:focus,
+.listing-form textarea:focus {
+    outline: none;
+    border-color: #222;
+}
+
+/* Sections */
+.form-section {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-row > div {
+    flex: 1;
+}
+
+/* CTA */
+.primary-cta {
+    width: 100%;
+    padding: 0.8rem;
+    background: #ff385c;
+    color: white;
+    border: none;
+    border-radius: 0.8rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.primary-cta:hover {
+    background: #e11d48;
+}

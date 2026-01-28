@@ -16,24 +16,31 @@ async function geocodeLocation(location, country) {
         params: {
           q: query,
           format: "json",
-          limit: 1
+          limit: 1,
+          addressdetails: 1
         },
         headers: {
-          "User-Agent": "airbnb-clone-migration"
-        }
+          // REQUIRED by Nominatim
+          "User-Agent": "airbnb-clone/1.0 (contact: subham.dev@gmail.com)",
+          "Accept-Language": "en"
+        },
+        timeout: 15000
       }
     );
 
-    if (!response.data || response.data.length === 0) {
+    if (!Array.isArray(response.data) || response.data.length === 0) {
       return null;
     }
 
     return {
-      lat: parseFloat(response.data[0].lat),
-      lng: parseFloat(response.data[0].lon)
+      lat: Number(response.data[0].lat),
+      lng: Number(response.data[0].lon)
     };
   } catch (err) {
-    console.error("❌ Geocoding failed for:", location, country);
+    console.error(
+      `❌ Geocoding failed for: ${location}, ${country}`,
+      err.message
+    );
     return null;
   }
 }
@@ -43,13 +50,15 @@ async function geocodeLocation(location, country) {
  */
 async function migrateListings() {
   try {
-    await mongoose.connect(process.env.MONGO_URL || "mongodb://localhost:27017/airbnb");
-    console.log("✅ MongoDB connected");
+    // ✅ ALWAYS append DB name
+    await mongoose.connect(process.env.MONGO_URL + "airbnb");
+    console.log("✅ MongoDB connected to airbnb");
 
     const listings = await Listing.find({
       $or: [
         { geometry: { $exists: false } },
-        { "geometry.coordinates": { $exists: false } }
+        { geometry: null },
+        { "geometry.coordinates": { $size: 0 } }
       ]
     });
 
@@ -62,32 +71,30 @@ async function migrateListings() {
       );
 
       if (!geoData) {
-        console.log(
-          `⚠️ Skipping: ${listing.location}, ${listing.country}`
-        );
+        console.log(`⚠️ Skipping: ${listing.location}, ${listing.country}`);
         continue;
       }
 
       listing.geometry = {
         type: "Point",
-        coordinates: [geoData.lng, geoData.lat] // MongoDB = [lng, lat]
+        coordinates: [geoData.lng, geoData.lat]
       };
 
       await listing.save();
 
-      console.log(
-        `✅ Updated: ${listing.location}, ${listing.country}`
-      );
+      console.log(`✅ Updated: ${listing.location}, ${listing.country}`);
 
-      // IMPORTANT: Respect Nominatim rate limits
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // ✅ REQUIRED: 1 request / second
+      await new Promise(r => setTimeout(r, 1000));
     }
 
     console.log("🎉 Migration complete");
-    mongoose.connection.close();
+    await mongoose.connection.close();
+    process.exit();
   } catch (err) {
     console.error("🔥 Migration failed:", err);
-    mongoose.connection.close();
+    await mongoose.connection.close();
+    process.exit(1);
   }
 }
 

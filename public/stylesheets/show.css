@@ -1,0 +1,231 @@
+/* ===== Base ===== */
+
+body {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+    max-width: 1200px;
+}
+
+/* ===== Navbar ===== */
+
+.navbar {
+    height: 5rem;
+    background-color: #ffffff;
+}
+
+.fa-airbnb {
+    color: #fa424d;
+    font-size: 2rem;
+}
+
+/* ===== Listing Cards (Index Page) ===== */
+
+.listing-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.listing-card {
+    border: none !important;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.card-img-top {
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.listing-img {
+    height: 260px;
+}
+
+.card-body {
+    padding: 10px 4px !important;
+}
+
+.listing-title {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.3;
+}
+
+.listing-price {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.listing-price span {
+    font-weight: 400;
+}
+
+/* ===== Show Page ===== */
+
+.show-img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+.price {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.price span {
+    font-weight: 400;
+    color: #555;
+}
+
+/* ===== Buttons ===== */
+
+.add-btn {
+    background-color: #fa424d !important;
+    border: none !important;
+}
+
+.btns {
+    display: flex;
+    gap: 10px;
+}
+
+/* ===== Star Rating Input ===== */
+
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 1.6rem;
+    color: #d8d8d8;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #000000;
+}
+
+.star-rating input:checked ~ label {
+    color: #000000;
+}
+
+/* ===== Star Display ===== */
+
+.star-display {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.star {
+    color: #d8d8d8;
+}
+
+.star.filled {
+    color: #000000;
+}
+
+/* ===== Review Summary ===== */
+
+.review-summary {
+    max-width: 420px;
+}
+
+.avg-rating {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.rating-bar {
+    display: grid;
+    grid-template-columns: 30px 1fr 30px;
+    gap: 10px;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.rating-bar .bar {
+    height: 8px;
+    background: #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.rating-bar .fill {
+    height: 100%;
+    background: #000000;
+}
+
+.rating-bar .count {
+    text-align: right;
+    color: #666666;
+}
+
+/* ===== Forms ===== */
+
+textarea.form-control {
+    resize: vertical;
+    border-radius: 10px;
+}
+
+textarea.form-control:focus {
+    box-shadow: none;
+    border-color: #000000;
+}
+
+/* ===== Map ===== */
+
+#map {
+    height: 400px;
+    width: 100%;
+    border-radius: 12px;
+}
+
+/* ===== Scrollbar ===== */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+    width: 14px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #fa424d;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #e63946;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #fa424d #ffffff;
+}

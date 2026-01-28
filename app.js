@@ -24,8 +24,9 @@ const app = express();
 
 async function main() {
     try {
-        await mongoose.connect(process.env.MONGO_URL);
+        await mongoose.connect(process.env.MONGO_URL + "airbnb");
         console.log("MongoDb connected");
+        console.log(mongoose.connection.name);
     } catch (err) {
         console.log(err);
     }
@@ -42,7 +43,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const sessionOptions = {
-    secret: "mysecretcode", 
+    secret: process.env.SESSION_SECRET, 
     resave: false, 
     saveUninitialized: false,
     cookie: {

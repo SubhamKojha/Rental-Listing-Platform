@@ -1,4 +1,5 @@
 const Listing = require("../models/listing.js");
+const Review = require("../models/review.js");
 const geocodeLocation = require("../middlewares/geocode.js");
 
 module.exports.index = async (req, res) => {
@@ -42,7 +43,28 @@ module.exports.showListings = async (req, res) => {
         req.flash("error", "Listing you requested for does not exist");
         return res.redirect("/listings");
     }
-    res.render("listings/show.ejs", {listing});
+
+    const reviews = listing.reviews;
+    const totalReviews = reviews.length;
+
+    let ratingCount = {
+        5: 0,
+        4: 0,
+        3: 0,
+        2: 0,
+        1: 0
+    };
+
+    let ratingSum = 0;
+
+    for (let review of reviews) {
+        ratingSum += review.rating;
+        ratingCount[review.rating]++;
+    }
+
+    const avgRating = totalReviews ? (ratingSum / totalReviews).toFixed(1) : 0;
+
+    res.render("listings/show.ejs", { listing, avgRating, totalReviews, ratingCount });
 };
 
 module.exports.editForm = async (req, res) => {
@@ -109,4 +131,25 @@ module.exports.deleteListing = async (req, res) => {
     await Listing.findByIdAndDelete(id);
     req.flash("success", "Listing Deleted!");
     res.redirect("/listings");
+};
+
+module.exports.searchListing = async (req, res) => {
+    let {q} = req.query;
+
+    if (!q || q.trim() == "") {
+        req.flash("error", "Please Enter a valid listing");
+        return res.redirect("/listings");
+    }
+
+    q = q.trim();
+
+    const listings = await Listing.find({ 
+        $or: [
+            { title: { $regex: q, $options: "i" } },
+            { location: { $regex: q, $options: "i" } },
+            { country: { $regex: q, $options: "i" } }
+        ]
+    });
+
+    res.render("listings/index.ejs", { allListings: listings });
 };

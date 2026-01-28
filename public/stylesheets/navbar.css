@@ -1,0 +1,102 @@
+/* Brand */
+.brand-logo {
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.brand-logo i {
+  font-size: 1.3rem;
+  color: #ff385c;
+}
+
+/* Nav links */
+.navbar .nav-link {
+  color: #333;
+  font-size: 0.95rem;
+  position: relative;
+}
+
+/* Underline animation */
+.nav-animate::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  width: 0;
+  height: 2px;
+  background-color: #ff385c;
+  transition: width 0.25s ease;
+}
+
+.nav-animate:hover::after {
+  width: 100%;
+}
+
+/* Buttons */
+.navbar .btn {
+  border-radius: 20px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+/* Navbar needs relative positioning */
+.navbar {
+  position: relative;
+}
+
+/* Absolute center wrapper */
+.navbar-search-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+/* Search bar container */
+.search-bar {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  padding: 6px 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+/* Hover glow */
+.search-bar:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Input */
+.search-input {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 8px 12px;
+  width: 260px;
+  font-size: 0.9rem;
+}
+
+/* Button */
+.search-btn {
+  background: #ff385c;
+  border: none;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+/* Remove Bootstrap focus */
+.search-input:focus {
+  box-shadow: none;
+}
+
+/* Hide search on mobile */
+@media (max-width: 768px) {
+  .navbar-search-wrapper {
+    display: none;
+  }
+}

@@ -1,9 +1,5 @@
 const User = require("../models/user.js");
 
-module.exports.signupForm = (req, res) => {
-    res.render("users/signup.ejs");
-};
-
 module.exports.signAuth =  async (req, res) => {
     try {
         let { username, email, password } = req.body;
@@ -19,12 +15,8 @@ module.exports.signAuth =  async (req, res) => {
         });
     } catch (err) {
         req.flash("error", err.message);
-        res.redirect("/signup");
+        res.redirect("back"); 
     }
-};
-
-module.exports.loginForm = (req, res) => {
-    res.render("users/login.ejs");
 };
 
 module.exports.loginAuth = async (req, res) => {

@@ -19,6 +19,9 @@ router.get("/new", isLoggedIn, listingController.newForm);
 //Create Route
 router.post("/", isLoggedIn, validateListing, uploads.single('listing[image]'), wrapAsync (listingController.createListing));
 
+//Search Route
+router.get("/search", wrapAsync (listingController.searchListing));
+
 //Show Route
 router.get("/:id", wrapAsync (listingController.showListings));
 
