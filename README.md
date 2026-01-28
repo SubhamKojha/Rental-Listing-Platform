@@ -2,6 +2,8 @@
 
 > A production-grade server-rendered rental marketplace built with Node.js, Express, MongoDB, and EJS demonstrating enterprise-level backend architecture with authentication, image uploads, interactive maps, and relational data modeling.
 
+**🌐 Live Demo:** [https://rental-listing-platform.onrender.com/](https://rental-listing-platform.onrender.com)
+
 ---
 
 ## Overview  
@@ -13,6 +15,7 @@ A full-featured, backend-first rental marketplace showcasing real-world developm
 - **MongoDB + Mongoose** - Relational data modeling  
 - **EJS Templating** - Server-side rendering  
 - **Passport.js** - Session-based authentication  
+- **connect-mongo** - MongoDB session store for persistent login
 - **Cloudinary** - Image storage and optimization  
 - **Leaflet.js** - Interactive maps  
 - **Joi** - Schema validation
@@ -23,7 +26,7 @@ A full-featured, backend-first rental marketplace showcasing real-world developm
 
 **User Management**
 - Registration and login with Passport.js
-- Session-based authentication
+- Session-based authentication with persistent cookies (connect-mongo)
 - Protected routes with ownership-based authorization
 
 **Listing Management**
@@ -41,6 +44,7 @@ A full-featured, backend-first rental marketplace showcasing real-world developm
 - Joi schema validation
 - Ownership middleware for access control
 - Password hashing via passport-local-mongoose
+- MongoDB session store for secure cookie persistence
 - Environment-based secrets management
 
 ---
@@ -51,11 +55,12 @@ A full-featured, backend-first rental marketplace showcasing real-world developm
 |-------|-------------|
 | **Backend** | Node.js, Express.js |
 | **Database** | MongoDB, Mongoose |
-| **Authentication** | Passport.js, express-session |
+| **Authentication** | Passport.js, express-session, connect-mongo |
 | **File Uploads** | Multer, Cloudinary SDK |
 | **Maps** | Leaflet.js |
 | **Templating** | EJS |
 | **Validation** | Joi |
+| **Deployment** | Render |
 | **Architecture** | MVC (Models, Controllers, Routes, Middlewares, Views) |
 | **Error Handling** | Custom ExpressError class, wrapAsync middleware |
 
@@ -118,7 +123,7 @@ Backend/
 │   └── user.js                    # User schema with Passport plugin
 │
 ├── routes/
-│   ├── listingRoutes.js           # /listings routes (GET, POST, PUT, DELETE)
+│   ├── listingRoutes.js           # /listings routes
 │   ├── reviewRoutes.js            # /listings/:id/reviews routes
 │   └── userRoutes.js              # /signup, /login, /logout routes
 │
@@ -127,48 +132,24 @@ Backend/
 │   └── wrapAsync.js               # Async error wrapper
 │
 ├── views/
-│   ├── includes/
-│   │   ├── flash.ejs              # Flash message alerts
-│   │   ├── footer.ejs             # Footer partial
-│   │   └── navbar.ejs             # Navigation bar with auth state
-│   │
-│   ├── layouts/
-│   │   └── boilerplate.ejs        # Main layout with Leaflet integration
-│   │
-│   ├── listings/
-│   │   ├── edit.ejs               # Edit listing form
-│   │   ├── index.ejs              # All listings with cluster map
-│   │   ├── newForm.ejs            # Create listing form
-│   │   └── show.ejs               # Listing detail with reviews and map
-│   │
-│   ├── users/
-│   │   ├── login.ejs              # Login form
-│   │   └── signup.ejs             # Registration form
-│   │
-│   ├── error.ejs                  # Error page template
+│   ├── includes/                  # Partials (navbar, footer, flash)
+│   ├── layouts/                   # Main layout with Leaflet
+│   ├── listings/                  # Listing views
+│   ├── users/                     # Auth views
+│   ├── error.ejs                  # Error page
 │   └── home.ejs                   # Landing page
 │
 ├── public/
-│   ├── images/                    # Static images
-│   ├── javascripts/
-│   │   ├── map.js                 # Leaflet map initialization
-│   │   └── script.js              # Additional client-side scripts
-│   └── stylesheets/
-│       └── style.css              # Custom CSS styles
+│   ├── javascripts/               # Client-side JS
+│   └── stylesheets/               # CSS
 │
 ├── init/
 │   └── index.js                   # Database seeding script
 │
-├── node_modules/                  # NPM dependencies
-│
-├── .env                           # Environment variables (not committed)
-├── .gitignore                     # Git ignore rules
 ├── app.js                         # Main Express application
-├── cloudConfig.js                 # Cloudinary SDK configuration
-├── package.json                   # NPM dependencies and scripts
-├── package-lock.json              # Dependency lock file
+├── cloudConfig.js                 # Cloudinary configuration
 ├── schema.js                      # Joi validation schemas
-└── README.md                      # Project documentation
+└── package.json                   # Dependencies
 ```
 
 ---
@@ -179,7 +160,7 @@ Backend/
 ```
 Client Request
     ↓
-Middleware Chain (Session, Auth, Flash)
+Middleware Chain (Session + connect-mongo, Auth, Flash)
     ↓
 Route Handler (Validation, Authorization)
     ↓
@@ -192,112 +173,29 @@ View Rendering (EJS + Leaflet)
 Response
 ```
 
-### Key Flows
-
-**Authentication**
-- User registers/logs in → Passport validates → Session created → User redirected
-
-**Listing Creation**
-- Form submission → Validation → Multer processes images → Cloudinary uploads → MongoDB saves → Map renders
-
-**Review System**
-- Auth check → Validation → Review saved with user/listing references → Display on listing page
-
-**Cascading Deletes**
-- Owner deletes listing → Pre-delete hook triggered → Reviews deleted → Cloudinary images removed → Success
-
 ### Database Relations
 
 ```
-┌─────────────────────────┐
-│         User            │
-├─────────────────────────┤
-│ _id: ObjectId           │
-│ username: String        │
-│ email: String           │
-│ password: String (hash) │
-└───────┬─────────────────┘
-        │
-        │ owner (one-to-many)
-        │
-        ▼
-┌─────────────────────────────────┐
-│         Listing                 │
-├─────────────────────────────────┤
-│ _id: ObjectId                   │
-│ title: String                   │
-│ description: String             │
-│ images: [{                      │
-│   url: String,                  │
-│   filename: String              │
-│ }]                              │
-│ price: Number                   │
-│ location: String                │
-│ country: String                 │
-│ geometry: {                     │
-│   type: "Point",                │
-│   coordinates: [lng, lat]       │
-│ }                               │
-│ owner: ObjectId → User._id      │
-│ reviews: [ObjectId → Review._id]│
-└───────┬─────────────────────────┘
-        │
-        │ reviews (one-to-many)
-        │
-        ▼
-┌─────────────────────────┐
-│        Review           │
-├─────────────────────────┤
-│ _id: ObjectId           │
-│ rating: Number (1-5)    │
-│ comment: String         │
-│ author: ObjectId → User │
-│ createdAt: Date         │
-└─────────────────────────┘
-        ▲
-        │
-        │ author (many-to-one)
-        │
-┌───────┴─────────────────┘
-│         User            
-└─────────────────────────
+User (1) ──owns──> (Many) Listing
+User (1) ──authors──> (Many) Review
+Listing (1) ──has──> (Many) Review
 ```
 
-**Relationship Details:**
-
-**User → Listing (One-to-Many)**
-- One user can own multiple listings
-- Each listing has exactly one owner
-- Referenced via `listing.owner` pointing to `user._id`
-
-**Listing → Review (One-to-Many)**
-- One listing can have multiple reviews
-- Reviews are stored as array of ObjectIds in `listing.reviews`
-- Each review belongs to one listing
-
-**User → Review (One-to-Many)**
-- One user can author multiple reviews
-- Each review has exactly one author
-- Referenced via `review.author` pointing to `user._id`
-
 **Cascading Delete Operations:**
-- When a **listing** is deleted:
-  - All associated **reviews** are automatically removed
-  - All **Cloudinary images** are deleted from cloud storage
-  - Implemented via Mongoose pre-delete middleware hooks
+- When a listing is deleted: all reviews and Cloudinary images are automatically removed
+- Implemented via Mongoose pre-delete middleware hooks
 
 **Authorization Rules:**
-- Only the **listing owner** can edit or delete the listing
-- Only the **review author** can delete their review
-- Only **authenticated users** can create listings or reviews
-- Enforced via custom middleware in `middlewares/authorization.js`
+- Only listing owners can edit/delete listings
+- Only review authors can delete their reviews
+- Only authenticated users can create listings/reviews
 
 ---
 
 ## Security Features
 
 - Password hashing (passport-local-mongoose)
-- Session management (express-session)
+- Persistent session management (connect-mongo)
 - Input validation (Joi schemas)
 - Authorization middleware (ownership checks)
 - CSRF protection (connect-flash)
@@ -308,13 +206,19 @@ Response
 
 ## Learning Outcomes
 
-**Backend Development:** MVC architecture, RESTful design, authentication/authorization, middleware patterns, async error handling
+- **Backend Development:** MVC architecture, RESTful APIs, authentication/authorization, middleware patterns
+- **Database:** MongoDB schema design, document references, cascading operations
+- **Session Management:** Persistent login with connect-mongo session store
+- **Integrations:** Cloudinary (images), Passport.js (auth), Multer (uploads), Leaflet.js (maps)
+- **Deployment:** Production deployment on Render with environment configuration
 
-**Database:** MongoDB schema design, document references, cascading operations, relational modeling in NoSQL
+---
 
-**Integrations:** Cloudinary (images), Passport.js (auth), Multer (uploads), Leaflet.js (maps)
+## Deployment
 
-**Best Practices:** Environment config, clean code structure, error handling, validation, secure credentials
+The application is deployed on Render with MongoDB Atlas for database hosting and environment variables configured for production security.
+
+**Live URL:** [https://rental-listing-platform.onrender.com/](https://rental-listing-platform.onrender.com)
 
 ---
 
