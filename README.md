@@ -88,6 +88,7 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
 ### Seed Database (Optional)
 ```bash
+# Seeds users, listings, and reviews with sample data
 node init/index.js
 ```
 
@@ -111,6 +112,13 @@ Backend/
 │   ├── reviewController.js        # Review create/delete logic
 │   └── userController.js          # Registration, login, logout handlers
 │
+├── init/
+│   ├── data.js                    # Sample listing data
+│   ├── geocodelisting.js          # Geocoding utility for listings
+│   ├── index.js                   # Main database seeding script
+│   ├── review.js                  # Review seed data
+│   └── userseed.js                # User seed data
+│
 ├── middlewares/
 │   ├── authorization.js           # isOwner, isReviewAuthor checks
 │   ├── geocode.js                 # Location to coordinates conversion
@@ -122,6 +130,23 @@ Backend/
 │   ├── review.js                  # Review schema with author and rating
 │   └── user.js                    # User schema with Passport plugin
 │
+├── public/
+│   ├── images/
+│   │   └── favicon.ico            # Site favicon
+│   ├── javascripts/
+│   │   ├── authToggle.js          # Authentication state toggle
+│   │   ├── home.js                # Home page interactions
+│   │   ├── map.js                 # Leaflet map initialization
+│   │   └── script.js              # Additional client-side scripts
+│   └── stylesheets/
+│       ├── footer.css             # Footer styles
+│       ├── home.css               # Home page styles
+│       ├── navbar.css             # Navigation bar styles
+│       ├── newForm.css            # Form styles
+│       ├── show.css               # Listing detail styles
+│       ├── signup.css             # Signup form styles
+│       └── style.css              # Global CSS styles
+│
 ├── routes/
 │   ├── listingRoutes.js           # /listings routes
 │   ├── reviewRoutes.js            # /listings/:id/reviews routes
@@ -132,24 +157,31 @@ Backend/
 │   └── wrapAsync.js               # Async error wrapper
 │
 ├── views/
-│   ├── includes/                  # Partials (navbar, footer, flash)
-│   ├── layouts/                   # Main layout with Leaflet
-│   ├── listings/                  # Listing views
-│   ├── users/                     # Auth views
-│   ├── error.ejs                  # Error page
+│   ├── auth/
+│   │   ├── login-form.ejs         # Login form template
+│   │   └── signup-form.ejs        # Signup form template
+│   ├── includes/
+│   │   ├── flash.ejs              # Flash message alerts
+│   │   ├── footer.ejs             # Footer partial
+│   │   └── navbar.ejs             # Navigation bar with auth state
+│   ├── layouts/
+│   │   └── boilerplate.ejs        # Main layout with Leaflet integration
+│   ├── listings/
+│   │   ├── edit.ejs               # Edit listing form
+│   │   ├── index.ejs              # All listings with cluster map
+│   │   ├── newForm.ejs            # Create listing form
+│   │   └── show.ejs               # Listing detail with reviews and map
+│   ├── error.ejs                  # Error page template
 │   └── home.ejs                   # Landing page
 │
-├── public/
-│   ├── javascripts/               # Client-side JS
-│   └── stylesheets/               # CSS
-│
-├── init/
-│   └── index.js                   # Database seeding script
-│
+├── .env                           # Environment variables (not committed)
+├── .gitignore                     # Git ignore rules
 ├── app.js                         # Main Express application
-├── cloudConfig.js                 # Cloudinary configuration
-├── schema.js                      # Joi validation schemas
-└── package.json                   # Dependencies
+├── cloudConfig.js                 # Cloudinary SDK configuration
+├── package.json                   # NPM dependencies and scripts
+├── package-lock.json              # Dependency lock file
+├── README.md                      # Project documentation
+└── schema.js                      # Joi validation schemas
 ```
 
 ---
